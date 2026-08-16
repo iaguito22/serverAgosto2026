@@ -569,6 +569,7 @@ const ServerTab = () => {
 };
 
 const PerformanceChart = ({ selectedPackId }) => {
+  const [resolution, setResolution] = useState('1080p');
   // Medidas reales: escena fija, 1080p pantalla completa, mundo con Terralith y LODs
   // ya generados, mediodía. Cifra medida en el portátil de pruebas.
   const perfData = {
