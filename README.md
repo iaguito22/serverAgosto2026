@@ -1,4 +1,25 @@
-# Web — Server Agosto 2026
+# Server Agosto 2026
+
+### 🌐 **[Ver la web → iaguito22.github.io/serverAgosto2026](https://iaguito22.github.io/serverAgosto2026/)**
+
+Modpack de Minecraft **1.21.11 (Fabric)** en cuatro variantes, con Terralith y Distant
+Horizons. Las cuatro llevan los mismos 68 mods: solo cambia la configuración.
+
+| Variante | Shader | FPS medidos | Descarga |
+|---|---|---:|---|
+| **Calidad** | Photon (BSL y Solas incluidos) | 55 | [calidad.zip](https://github.com/iaguito22/serverAgosto2026/releases/download/v1/calidad.zip) |
+| **Intermedia** | E-LITE | 89 | [intermedia.zip](https://github.com/iaguito22/serverAgosto2026/releases/download/v1/intermedia.zip) |
+| **Rendimiento** | E-LITE ligero | 118 | [rendimiento.zip](https://github.com/iaguito22/serverAgosto2026/releases/download/v1/rendimiento.zip) |
+| **Potato** | ninguno | 238 | [potato.zip](https://github.com/iaguito22/serverAgosto2026/releases/download/v1/potato.zip) |
+| Servidor | — | — | [servidor.zip](https://github.com/iaguito22/serverAgosto2026/releases/download/v1/servidor.zip) |
+
+Medidos a 1080p en una RTX 3050 Laptop **en modo ahorro**. Cada zip trae instalador para
+Windows y para Linux: lo descomprimes donde quieras, lo ejecutas, y él guarda tus carpetas
+actuales en una copia antes de poner las nuevas.
+
+---
+
+## Sobre esta web
 
 Copia de la web del proyecto *selector de mods 1.21.1 create*, con la paleta cambiada
 (azul → verde selva con acentos ámbar) y el contenido adaptado a este modpack.
