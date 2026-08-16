@@ -903,7 +903,7 @@ const ModpacksTab = ({ setActiveTab }) => {
               onClick={() => setActiveTab('acerca')}
               className="btn btn-outline py-4 font-bold uppercase tracking-wider border-white/10 text-slate-300 hover:text-white"
             >
-              <Info size={18} /> Guía de Instalación
+              <Info size={18} /> Cómo se instala
             </button>
           </div>
 
@@ -1020,13 +1020,57 @@ const AboutTab = () => (
       <h3 className="text-2xl mb-6 flex items-center gap-3 border-b border-white/10 pb-4">
         <Info className="text-emerald-400" /> Cómo se instala
       </h3>
-      <ol className="text-secondary leading-relaxed list-decimal ml-6 space-y-2">
-        <li>Instala <span className="theme-text-primary font-bold">Fabric Loader 0.19.3</span> para Minecraft 1.21.11.</li>
-        <li>Descarga el zip de la variante que quieras.</li>
-        <li>Descomprímelo dentro de tu carpeta <code>.minecraft</code> (o del perfil que uses).</li>
-        <li>Dale al menos <span className="theme-text-primary font-bold">8 GB de RAM</span> al juego, 12 si puedes.</li>
-        <li>Entra: los shaders y la configuración ya vienen puestos.</li>
+      <p className="text-secondary leading-relaxed mb-6">
+        Cada zip trae un instalador dentro. <span className="theme-text-primary font-bold">No hace falta
+        borrar carpetas a mano</span> ni saber dónde está nada.
+      </p>
+      <ol className="text-secondary leading-relaxed list-decimal ml-6 space-y-3">
+        <li>
+          Instala <span className="theme-text-primary font-bold">Fabric Loader 0.19.3</span> para
+          Minecraft <span className="theme-text-primary font-bold">1.21.11</span> desde{' '}
+          <a href="https://fabricmc.net/use/installer/" target="_blank" rel="noreferrer"
+             className="text-emerald-400 underline">fabricmc.net</a>. Esto solo se hace una vez, y sin
+          ello el juego arranca sin mods.
+        </li>
+        <li>Descarga el zip de la variante que quieras y descomprímelo <span className="theme-text-primary font-bold">donde te apetezca</span> (el escritorio vale).</li>
+        <li>
+          Entra en la carpeta y ejecuta el instalador:
+          <div className="mt-2 ml-1 space-y-1 text-sm">
+            <div>· <span className="theme-text-primary font-bold">Windows</span>: doble clic en <code>INSTALAR-WINDOWS.bat</code></div>
+            <div>· <span className="theme-text-primary font-bold">Linux</span>: doble clic en <code>instalar-linux.sh</code>, o en una terminal <code>bash instalar-linux.sh</code></div>
+          </div>
+        </li>
+        <li>Se abre una ventana negra que te va contando lo que hace y se cierra sola. Ya está.</li>
+        <li>En el launcher, dale al menos <span className="theme-text-primary font-bold">8 GB de RAM</span> al juego (12 si puedes) y elige el perfil de Fabric.</li>
       </ol>
+
+      <div className="mt-8 p-6 rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.04]">
+        <h4 className="text-emerald-400 font-bold mb-3 flex items-center gap-2"><Shield size={18} /> Tus cosas no se pierden</h4>
+        <p className="text-sm text-secondary leading-relaxed">
+          El instalador <span className="theme-text-primary font-bold">mueve</span> tus carpetas
+          <code> mods</code>, <code>shaderpacks</code>, <code>resourcepacks</code> y <code>config</code> a una
+          carpeta <code>copia-anterior-&lt;fecha&gt;</code> junto al propio instalador. No borra nada: si tenías
+          mods, siguen ahí. Para volver atrás, devuelves esas carpetas a su sitio.
+        </p>
+        <p className="text-sm text-secondary leading-relaxed mt-3">
+          De tus ajustes solo cambia las líneas de vídeo de la variante (render distance y similares).
+          Tu FOV, tus controles, el sonido y el idioma se quedan como los tengas.
+        </p>
+        <p className="text-sm text-secondary leading-relaxed mt-3">
+          ¿Te arrepientes? En la misma carpeta tienes <code>RESTAURAR-WINDOWS.bat</code> y{' '}
+          <code>restaurar-linux.sh</code>: devuelven tus carpetas de antes tal y como estaban,
+          y apartan las del modpack por si quieres volver a ponerlas.
+        </p>
+      </div>
+
+      <div className="mt-6 p-6 rounded-2xl border border-white/10">
+        <h4 className="font-bold mb-3 flex items-center gap-2 text-slate-200"><AlertTriangle size={18} className="text-emerald-400" /> Si el terreno lejano se ve roto</h4>
+        <p className="text-sm text-secondary leading-relaxed">
+          Pasa al cambiar entre pantalla completa y ventana con shaders activos: Distant Horizons y
+          Iris se desincronizan. Pulsa <span className="theme-text-primary font-bold">R</span> y se arregla
+          al instante. Recargar chunks con F3+A no sirve.
+        </p>
+      </div>
     </section>
   </div>
 );
