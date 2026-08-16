@@ -569,34 +569,20 @@ const ServerTab = () => {
 };
 
 const PerformanceChart = ({ selectedPackId }) => {
-  const [gpu, setGpu] = useState('RTX 3050 (ahorro)');
-  const [resolution, setResolution] = useState('1080p');
-
   // Medidas reales: escena fija, 1080p pantalla completa, mundo con Terralith y LODs
-  // ya generados, mediodía. La columna "modo ahorro" es como está el portátil ahora
-  // (GPU a 795 MHz de 2100); "modo juego" es la estimación al quitarle el freno.
+  // ya generados, mediodía. Cifra medida en el portátil de pruebas.
   const perfData = {
-    '1080p': {
-      'RTX 3050 (ahorro)': [
-        { packId: 'potato', name: 'Potato (sin shader)', fps: 238 },
-        { packId: 'rendimiento', name: 'Rendimiento (E-LITE)', fps: 118 },
-        { packId: 'intermedia', name: 'Intermedia (E-LITE + DH)', fps: 89 },
-        { packId: 'calidad', name: 'Calidad (Photon)', fps: 55 },
-        { packId: 'calidad', name: 'Calidad (BSL)', fps: 57 },
-        { packId: 'calidad', name: 'Calidad (Solas)', fps: 52 }
-      ],
-      'RTX 3050 (modo juego, est.)': [
-        { packId: 'potato', name: 'Potato (sin shader)', fps: 300 },
-        { packId: 'rendimiento', name: 'Rendimiento (E-LITE)', fps: 240 },
-        { packId: 'intermedia', name: 'Intermedia (E-LITE + DH)', fps: 180 },
-        { packId: 'calidad', name: 'Calidad (Photon)', fps: 150 },
-        { packId: 'calidad', name: 'Calidad (Complementary)', fps: 110 },
-        { packId: 'calidad', name: 'Calidad (Solas)', fps: 105 }
-      ]
-    }
+    '1080p': [
+      { packId: 'potato', name: 'Potato (sin shader)', fps: 238 },
+      { packId: 'rendimiento', name: 'Rendimiento (E-LITE)', fps: 118 },
+      { packId: 'intermedia', name: 'Intermedia (E-LITE + DH)', fps: 89 },
+      { packId: 'calidad', name: 'Calidad (Photon)', fps: 55 },
+      { packId: 'calidad', name: 'Calidad (BSL)', fps: 57 },
+      { packId: 'calidad', name: 'Calidad (Solas)', fps: 52 }
+    ]
   };
 
-  const currentData = perfData[resolution][gpu];
+  const currentData = perfData[resolution];
   const maxFps = Math.max(...currentData.map(d => d.fps === 'N/A' ? 0 : d.fps));
 
   return (
@@ -604,14 +590,6 @@ const PerformanceChart = ({ selectedPackId }) => {
       <div className="flex flex-col items-center justify-center mb-2 gap-4 text-center">
         <h3 className="text-xl font-bold flex items-center justify-center gap-2 text-white"><Zap size={20} className="text-emerald-400" /> Comparativa de Rendimiento</h3>
         <div className="flex flex-wrap justify-center gap-4">
-          <select
-            value={gpu}
-            onChange={e => setGpu(e.target.value)}
-            className="theme-select border rounded-full px-5 py-2.5 outline-none focus:border-emerald-500 font-medium text-sm cursor-pointer transition-all hover:bg-slate-800/80 shadow-md"
-          >
-            <option value="RTX 3050 (ahorro)">RTX 3050 · modo ahorro (medido)</option>
-            <option value="RTX 3050 (modo juego, est.)">RTX 3050 · modo juego (estimado)</option>
-          </select>
           <select
             value={resolution}
             onChange={e => setResolution(e.target.value)}
@@ -667,7 +645,7 @@ const ModpacksTab = ({ setActiveTab }) => {
       performance: {
         fps: 'mín. 137', media: '238',
         ram: 'mínimo 8 GB, recomendado 12 GB',
-        gpu: 'RTX 3050 Laptop en modo ahorro',
+        gpu: 'RTX 3050 Laptop',
         usage: 'GPU 84% · CPU 24% · RAM 6,5 GB · VRAM 460 MB',
         dh: 'Activado (radio 32)',
         resolution: '1080p'
@@ -686,7 +664,7 @@ const ModpacksTab = ({ setActiveTab }) => {
       performance: {
         fps: 'mín. 92', media: '118',
         ram: 'mínimo 8 GB, recomendado 12 GB',
-        gpu: 'RTX 3050 Laptop en modo ahorro',
+        gpu: 'RTX 3050 Laptop',
         usage: 'GPU 95% · CPU 33% · RAM 7,3 GB · VRAM 868 MB',
         dh: 'Activado (radio 64)',
         resolution: '1080p'
@@ -705,7 +683,7 @@ const ModpacksTab = ({ setActiveTab }) => {
       performance: {
         fps: 'mín. 68', media: '89',
         ram: 'mínimo 8 GB, recomendado 12 GB',
-        gpu: 'RTX 3050 Laptop en modo ahorro',
+        gpu: 'RTX 3050 Laptop',
         usage: 'GPU 92% · CPU 37% · RAM 7,8 GB · VRAM 1,2 GB',
         dh: 'Activado (radio 200)',
         resolution: '1080p'
@@ -724,7 +702,7 @@ const ModpacksTab = ({ setActiveTab }) => {
       performance: {
         fps: 'Photon 55 · BSL 57 · Solas 52', media: '55',
         ram: 'mínimo 8 GB, recomendado 12 GB',
-        gpu: 'RTX 3050 Laptop en modo ahorro',
+        gpu: 'RTX 3050 Laptop',
         usage: 'GPU 79% · CPU 41% · RAM 7,4 GB · VRAM 1,1 GB',
         dh: 'Activado (radio 300)',
         resolution: '1080p'
@@ -1007,8 +985,7 @@ const AboutTab = () => (
         <AlertTriangle className="text-emerald-400" /> Antes de quejarte de los FPS
       </h3>
       <p className="text-secondary leading-relaxed mb-4">
-        Todas las cifras están medidas con el portátil <span className="theme-text-primary font-bold">en modo ahorro</span>:
-        la GPU corría a 795 MHz de los 2100 que puede dar. Si tu equipo está en modo rendimiento, esperarás bastante más.
+        Todas las cifras están medidas en una GPU de portatil (RTX 3050 Laptop). En un ordenador de sobremesa o con GPU superior, obtendrás bastante más rendimiento.
       </p>
       <p className="text-secondary leading-relaxed">
         Y si cambias entre pantalla completa y ventana con shaders activos, Distant Horizons se corrompe:
@@ -1036,8 +1013,8 @@ const AboutTab = () => (
         <li>
           Entra en la carpeta y ejecuta el instalador:
           <div className="mt-2 ml-1 space-y-1 text-sm">
-            <div>· <span className="theme-text-primary font-bold">Windows</span>: doble clic en <code>INSTALAR-WINDOWS.bat</code></div>
-            <div>· <span className="theme-text-primary font-bold">Linux</span>: doble clic en <code>instalar-linux.sh</code>, o en una terminal <code>bash instalar-linux.sh</code></div>
+            <div>· <span className="theme-text-primary font-bold">Windows</span>: clic derecho en <code>autoinstallmodsWindows.bat</code> → <span className="text-emerald-400 font-bold">Ejecutar como administrador</span>.</div>
+            <div>· <span className="theme-text-primary font-bold">Linux</span>: doble clic en <code>autoinstallmodsLinux.sh</code>, o en una terminal <code>bash autoinstallmodsLinux.sh</code></div>
           </div>
         </li>
         <li>Se abre una ventana negra que te va contando lo que hace y se cierra sola. Ya está.</li>
@@ -1057,10 +1034,30 @@ const AboutTab = () => (
           Tu FOV, tus controles, el sonido y el idioma se quedan como los tengas.
         </p>
         <p className="text-sm text-secondary leading-relaxed mt-3">
-          ¿Te arrepientes? En la misma carpeta tienes <code>RESTAURAR-WINDOWS.bat</code> y{' '}
-          <code>restaurar-linux.sh</code>: devuelven tus carpetas de antes tal y como estaban,
+          ¿Te arrepientes? En la misma carpeta tienes <code>restaurarmodsWindows.bat</code> y{' '}
+          <code>restaurarmodsLinux.sh</code>: devuelven tus carpetas de antes tal y como estaban,
           y apartan las del modpack por si quieres volver a ponerlas.
         </p>
+      </div>
+
+      <div className="mt-6 p-6 rounded-2xl border border-white/10">
+        <h4 className="font-bold mb-3 flex items-center gap-2 text-slate-200"><Sparkles size={18} className="text-emerald-400" /> Ajustar la variante Calidad al máximo</h4>
+        <p className="text-sm text-secondary leading-relaxed">
+          Para exprimir la variante <span className="theme-text-primary font-bold">Calidad</span> al máximo si tienes un PC potente,
+          lo que más se nota y mejor imagen da es <span className="theme-text-primary font-bold">aumentar la distancia de renderizado de Distant Horizons</span> (en el menú del mod dentro del juego, icono de DH arriba a la izquierda). Con shaders pesados apenas cuesta FPS extra y extiende el horizonte enormemente.
+        </p>
+      </div>
+
+      <div className="mt-6 p-6 rounded-2xl border border-white/10">
+        <h4 className="font-bold mb-3 flex items-center gap-2 text-slate-200"><Gamepad2 size={18} className="text-emerald-400" /> Soporte de mando (Controlify)</h4>
+        <p className="text-sm text-secondary leading-relaxed">
+          El modpack incluye <span className="theme-text-primary font-bold">Controlify</span> integrado para jugar cómodamente con mando de Xbox, PlayStation o Switch.
+        </p>
+        <ul className="text-sm text-secondary leading-relaxed list-disc ml-5 mt-2 space-y-1">
+          <li>Conecta tu mando antes o durante la partida; lo detectará automáticamente.</li>
+          <li>Accede a los ajustes en <span className="theme-text-primary font-bold">Opciones → Controles → Controlify</span> para ajustar la sensibilidad o cambiar botones.</li>
+          <li>Incluye vibración háptica e interfaz adaptada a mando.</li>
+        </ul>
       </div>
 
       <div className="mt-6 p-6 rounded-2xl border border-white/10">
