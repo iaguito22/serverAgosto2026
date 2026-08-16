@@ -52,6 +52,26 @@ de fichero, o no se activan:
 `continuity:default` (sin él el cristal no conecta), `continuity:glass_pane_culling_fix`,
 `cullleaves:smartleaves`, `controlify:legacy_console`.
 
+**Escribir una lista de resource packs desactiva todo lo que no esté en ella**, incluidos
+los packs que un mod registra como `DEFAULT_ENABLED`. Esos el juego los enciende solo **la
+primera vez** y los deja escritos en `options.txt`; en una instalación nueva no se nota que
+falten, pero al aplicar la lista sobre el `options.txt` de alguien que ya había jugado, se
+apagan y no vuelven. Los dos que hay aquí: **`holdmyitems:pack_test`** (el mod HMI, que es
+quien hace las animaciones de primera persona: poses de mano, modelos 3D de baldes y cubos,
+animaciones de beber) y **`atmosfera:dungeons`**. La lista buena es la que el propio juego
+deja escrita en `options.txt` después de aceptarla: cópiala de ahí y no la inventes, que
+un id que no existe se ignora en silencio.
+
+**Physics Mod y EMF: usa EMF 3.1.1, no la última.** Physics Mod 3.1.40 trae un mixin
+compilado contra la firma vieja de `EMFModelPartVanilla` (4 parámetros). De EMF 3.2 en
+adelante el constructor lleva uno más, el mixin no encaja, salta
+`InvalidInjectionException` y **EMF revienta a mitad de inicializarse**, dejando los
+modelos de entidad a medias. Comprobado leyendo el bytecode de las cinco versiones de EMF y
+arrancando el juego con las dos combinaciones.
+
+**Y EMF/ETF hacen falta**: Fresh Animations son ficheros CEM de OptiFine, que en Fabric solo
+lee EMF; Bray's Zombie Overhaul necesita además ETF. Quitarlos deja tres packs de adorno.
+
 **No pongas `version:` en `ajustes-video.txt`.** Es la versión del formato de opciones y no
 es asunto del instalador.
 

@@ -3,7 +3,7 @@
 ### 🌐 **[Ver la web → iaguito22.github.io/serverAgosto2026](https://iaguito22.github.io/serverAgosto2026/)**
 
 Modpack de Minecraft **1.21.11 (Fabric)** en cuatro variantes, con Terralith y Distant
-Horizons. Las cuatro llevan los mismos 67 mods: solo cambia la configuración.
+Horizons. Las cuatro llevan los mismos 69 mods: solo cambia la configuración.
 
 | Variante | Shader | FPS medidos | Descarga |
 |---|---|---:|---|
