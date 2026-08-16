@@ -646,7 +646,7 @@ const ModpacksTab = ({ setActiveTab }) => {
       desc: 'Sin shaders y con Distant Horizons al mínimo. Todo el pack instalado, pero configurado para exprimir cada fotograma. Para portátiles humildes o si prefieres fluidez por encima de todo.',
       features: ['Los 69 mods del pack', 'Sin shaders', 'Distant Horizons radio 32', 'Render distance 3', 'Configuración pre-optimizada'],
       performance: {
-        fps: 'mín. 111', media: '140',
+        fps: 'mín. 120', media: '147',
         ram: 'mínimo 8 GB, recomendado 12 GB',
         gpu: 'RTX 3050 Laptop',
         usage: 'GPU 84% · CPU 24% · RAM 6,5 GB · VRAM 460 MB',
@@ -654,7 +654,7 @@ const ModpacksTab = ({ setActiveTab }) => {
         resolution: '1080p'
       },
       screenshot: potatoImg,
-      capturas: [ { src: potatoImg, label: 'Sin shader', fps: '140 FPS' } ],
+      capturas: [ { src: potatoImg, label: 'Sin shader', fps: '147 FPS' } ],
       videos: [],
       downloadUrl: 'https://github.com/iaguito22/serverAgosto2026/releases/download/v1/potato.zip'
     },
@@ -665,7 +665,7 @@ const ModpacksTab = ({ setActiveTab }) => {
       desc: 'Shader ligero y Distant Horizons corto pero con calidad vertical media, para que los árboles lejanos no se vean como columnas. Va muy suelto.',
       features: ['Los 69 mods del pack', 'Shader E-LITE', 'Distant Horizons radio 48', 'Render distance 8', 'Niebla del shader activada'],
       performance: {
-        fps: 'mín. 92', media: '104',
+        fps: 'mín. 117', media: '133',
         ram: 'mínimo 8 GB, recomendado 12 GB',
         gpu: 'RTX 3050 Laptop',
         usage: 'GPU 95% · CPU 33% · RAM 7,3 GB · VRAM 868 MB',
@@ -674,8 +674,8 @@ const ModpacksTab = ({ setActiveTab }) => {
       },
       screenshot: rendimientoImg,
       capturas: [
-        { src: rendimientoImg, label: 'E-LITE (por defecto)', fps: '104 FPS' },
-        { src: renMakeupImg, label: 'MakeUp Ultra Fast', fps: '62 FPS' }
+        { src: rendimientoImg, label: 'E-LITE (por defecto)', fps: '133 FPS' },
+        { src: renMakeupImg, label: 'MakeUp Ultra Fast', fps: '91 FPS' }
       ],
       videos: [],
       downloadUrl: 'https://github.com/iaguito22/serverAgosto2026/releases/download/v1/rendimiento.zip'
@@ -685,9 +685,9 @@ const ModpacksTab = ({ setActiveTab }) => {
       title: 'Intermedia — el equilibrio',
       icon: <Eye size={40} className="text-emerald-400" />,
       desc: 'Distant Horizons a 200 bloques con calidad vertical alta y shader E-LITE con niebla y nubes volumétricas. Horizonte enorme sin castigar los FPS.',
-      features: ['Los 69 mods del pack', 'Shader E-LITE', 'Distant Horizons radio 200', 'Calidad vertical HIGH', 'Render distance 12'],
+      features: ['Los 69 mods del pack', 'Shader E-LITE', 'Distant Horizons radio 200', 'Calidad vertical HIGH', 'Render distance 10'],
       performance: {
-        fps: 'mín. 62', media: '88',
+        fps: 'mín. 68', media: '91',
         ram: 'mínimo 8 GB, recomendado 12 GB',
         gpu: 'RTX 3050 Laptop',
         usage: 'GPU 92% · CPU 37% · RAM 7,8 GB · VRAM 1,2 GB',
@@ -696,8 +696,8 @@ const ModpacksTab = ({ setActiveTab }) => {
       },
       screenshot: intermediaImg,
       capturas: [
-        { src: intermediaImg, label: 'E-LITE (por defecto)', fps: '88 FPS' },
-        { src: intMakeupImg, label: 'MakeUp Ultra Fast', fps: '68 FPS' }
+        { src: intermediaImg, label: 'E-LITE (por defecto)', fps: '91 FPS' },
+        { src: intMakeupImg, label: 'MakeUp Ultra Fast', fps: '59 FPS' }
       ],
       videos: [],
       downloadUrl: 'https://github.com/iaguito22/serverAgosto2026/releases/download/v1/intermedia.zip'
@@ -709,7 +709,7 @@ const ModpacksTab = ({ setActiveTab }) => {
       desc: 'Tres shaders pesados configurados: Photon por defecto, con BSL y Solas listos para cambiar. Distant Horizons a 300 bloques.',
       features: ['Los 69 mods del pack', 'Photon (por defecto)', 'BSL y Solas incluidos', 'Distant Horizons radio 300', 'Render distance 11'],
       performance: {
-        fps: 'Photon 56 · BSL 41 · Solas 50', media: '56',
+        fps: 'Photon 64 · BSL 46 · Solas 56', media: '64',
         ram: 'mínimo 8 GB, recomendado 12 GB',
         gpu: 'RTX 3050 Laptop',
         usage: 'GPU 79% · CPU 41% · RAM 7,4 GB · VRAM 1,1 GB',
@@ -718,9 +718,9 @@ const ModpacksTab = ({ setActiveTab }) => {
       },
       screenshot: calidadImg,
       capturas: [
-        { src: calPhotonImg, label: 'Photon (por defecto)', fps: '56 FPS' },
-        { src: calBslImg, label: 'BSL', fps: '41 FPS' },
-        { src: calSolasImg, label: 'Solas', fps: '50 FPS' }
+        { src: calPhotonImg, label: 'Photon (por defecto)', fps: '64 FPS' },
+        { src: calBslImg, label: 'BSL', fps: '46 FPS' },
+        { src: calSolasImg, label: 'Solas', fps: '56 FPS' }
       ],
       videos: [],
       downloadUrl: 'https://github.com/iaguito22/serverAgosto2026/releases/download/v1/calidad.zip'
