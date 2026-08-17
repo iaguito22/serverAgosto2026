@@ -581,8 +581,10 @@ const PerformanceChart = ({ selectedPackId }) => {
   const perfData = {
     '1080p': [
       { packId: 'potato', name: 'Potato (sin shader)', fps: 285 },
-      { packId: 'rendimiento', name: "Rendimiento (E-LITE o Sildur's)", fps: 157 },
-      { packId: 'intermedia', name: "Intermedia (E-LITE o Sildur's + DH)", fps: 98 },
+      { packId: 'rendimiento', name: 'Rendimiento (E-LITE)', fps: 157 },
+      { packId: 'rendimiento', name: "Rendimiento (Sildur's Fast)", fps: 161 },
+      { packId: 'intermedia', name: 'Intermedia (E-LITE + DH)', fps: 98 },
+      { packId: 'intermedia', name: "Intermedia (Sildur's Fast + DH)", fps: 95 },
       { packId: 'calidad', name: 'Calidad (Photon)', fps: 63 },
       { packId: 'calidad', name: 'Calidad (Solas)', fps: 58 },
       { packId: 'calidad', name: 'Calidad (BSL)', fps: 57 }
@@ -637,9 +639,9 @@ const PerformanceChart = ({ selectedPackId }) => {
           })}
         </div>
         <p className="text-[11px] text-secondary mt-6 leading-relaxed">
-          E-LITE y Sildur's van en la misma barra porque miden lo mismo: alternando pasada a
-          pasada, una la gana cada uno (172 y 153 E-LITE contra 164 y 169 Sildur's). Elige entre
-          los dos por cómo se ven, no por FPS.
+          Los cuatro puntos que separan a E-LITE de Sildur's en rendimiento no son una ventaja
+          real: alternando pasada a pasada, una la gana cada uno (172 y 153 E-LITE contra 164 y
+          169 Sildur's). Entre esos dos elige por cómo se ven, que en FPS están empatados.
         </p>
       </div>
     </div>
@@ -710,7 +712,7 @@ const ModpacksTab = ({ setActiveTab }) => {
       screenshot: rendimientoImg,
       capturas: [
         { src: rendimientoImg, label: 'E-LITE (por defecto)', fps: '157 FPS' },
-        { src: rendSildursImg, label: "Sildur's Enhanced Default Fast", fps: '157 FPS' }
+        { src: rendSildursImg, label: "Sildur's Enhanced Default Fast", fps: '161 FPS' }
       ],
       videos: [],
       downloadUrl: 'https://github.com/iaguito22/serverAgosto2026/releases/download/v1/rendimiento.zip'
@@ -1064,7 +1066,7 @@ const AboutTab = () => (
           </div>
           <div className="pt-4">
             <h4 className="text-emerald-400 font-bold flex items-center gap-2 mb-2"><Monitor size={18} /> Shaders</h4>
-            <p className="text-sm text-secondary">Iris con los cinco shaders instalados en las cuatro variantes: Photon, BSL, Solas, E-LITE y Sildur's Enhanced Default Fast, cada uno con su configuración ya ajustada. Sildur's va parcheado para que ilumine los LODs de Distant Horizons (el original los dejaba en negro y el horizonte lejano se veía como una mancha), así que ya sirve en las cuatro variantes. Corre igual que E-LITE —medidos por parejas dan lo mismo, 157 en rendimiento y 95 en intermedia—, pero es más estable: menos tirones en el 5% de fotogramas peores. Cambia entre uno y otro en Iris según cuál te guste más, que en FPS te da igual.</p>
+            <p className="text-sm text-secondary">Iris con los cinco shaders instalados en las cuatro variantes: Photon, BSL, Solas, E-LITE y Sildur's Enhanced Default Fast, cada uno con su configuración ya ajustada. Sildur's va parcheado para que ilumine los LODs de Distant Horizons (el original los dejaba en negro y el horizonte lejano se veía como una mancha), así que ya sirve en las cuatro variantes. Corre igual que E-LITE —161 contra 157 en rendimiento y 95 contra 98 en intermedia, diferencias que se dan la vuelta de una pasada a otra—, pero es más estable: menos tirones en el 5% de fotogramas peores. Cambia entre uno y otro en Iris según cuál te guste más, que en FPS te da igual.</p>
           </div>
         </div>
       </div>
