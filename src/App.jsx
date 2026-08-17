@@ -13,6 +13,7 @@ import calidadImg from './assets/calidad.png';
 import calBslImg from './assets/calidad-bsl.png';
 import calPhotonImg from './assets/calidad-photon.png';
 import calSolasImg from './assets/calidad-solas.png';
+import intermediaSildursImg from './assets/intermedia-sildurs.png';
 import './index.css';
 
 // --- COMPONENTS ---
@@ -580,7 +581,9 @@ const PerformanceChart = ({ selectedPackId }) => {
     '1080p': [
       { packId: 'potato', name: 'Potato (sin shader)', fps: 285 },
       { packId: 'rendimiento', name: 'Rendimiento (E-LITE)', fps: 157 },
-      { packId: 'intermedia', name: 'Intermedia (E-LITE + DH)', fps: 116 },
+      { packId: 'rendimiento', name: "Rendimiento (Sildur's Fast)", fps: 157 },
+      { packId: 'intermedia', name: 'Intermedia (E-LITE + DH)', fps: 98 },
+      { packId: 'intermedia', name: "Intermedia (Sildur's Fast + DH)", fps: 95 },
       { packId: 'calidad', name: 'Calidad (Photon)', fps: 63 },
       { packId: 'calidad', name: 'Calidad (Solas)', fps: 58 },
       { packId: 'calidad', name: 'Calidad (BSL)', fps: 57 }
@@ -646,7 +649,20 @@ const ModpacksTab = ({ setActiveTab }) => {
       title: 'Potato — máximos FPS',
       icon: <Zap size={40} className="text-emerald-400" />,
       desc: 'Sin shaders, sin Distant Horizons y con los resource packs más caros desactivados. Casi triplica lo que daba antes. A cambio no hay horizonte lejano ni animaciones de mobs, pero la distancia de visión es de 8 chunks y todo lo demás sigue en su sitio.',
-      features: ['68 mods (todos menos Distant Horizons)', 'Sin shaders', 'Render distance 8', '7 resource packs activos de 13', 'Sin horizonte lejano'],
+      features: [
+        '68 mods: todos menos Distant Horizons',
+        'Sin shader activado (los 5 vienen igual en el zip)',
+        'Render distance 8, simulación 16',
+        '7 de los 13 resource packs activos',
+        'Gráficos rápidos y escala de entidades 0,75'
+      ],
+      noLleva: [
+        'Distant Horizons: el mod ni siquiera va en el zip, así que no hay horizonte lejano',
+        'Shader activado: sin sombras, sin reflejos en el agua y sin niebla de shader',
+        'Fresh Animations y los otros 5 packs de animaciones y color (los llevan calidad e intermedia)',
+        'Gráficos fancy: nubes, hojas y transparencias van en modo rápido'
+      ],
+      igualQue: 'Todo lo demás es idéntico a las otras variantes: mismos mods de juego, mismo mundo y mismos ajustes de servidor.',
       performance: {
         fps: 'mín. 203', media: '285',
         ram: 'mínimo 8 GB, recomendado 12 GB',
@@ -665,7 +681,20 @@ const ModpacksTab = ({ setActiveTab }) => {
       title: 'Rendimiento — fluidez con shaders',
       icon: <Cpu size={40} className="text-emerald-400" />,
       desc: 'Shader ligero E-LITE y nada de Distant Horizons: por el horizonte lejano pagaba un 15% de FPS y aquí manda la fluidez. Los resource packs más caros vienen desactivados. Si quieres horizonte, esa es la variante intermedia.',
-      features: ['68 mods (todos menos Distant Horizons)', 'Shader E-LITE', 'Render distance 8', '7 resource packs activos de 13', 'Niebla del shader activada'],
+      features: [
+        '68 mods: todos menos Distant Horizons',
+        'Shader E-LITE activado, con niebla',
+        'Render distance 8, simulación 16',
+        '7 de los 13 resource packs activos',
+        "Sildur's Enhanced Default Fast listo como alternativa: mismos FPS que E-LITE y algo más estable",
+        'Gráficos fancy: nubes, hojas y transparencias completas'
+      ],
+      noLleva: [
+        'Distant Horizons: el mod no va en el zip. Probado en frío: con DH corta y la render distance bajada tampoco compensa',
+        'Fresh Animations y los otros 5 packs de animaciones y color (los llevan calidad e intermedia)',
+        'Los shaders pesados activados: Photon, BSL y Solas vienen dentro, pero el que arranca es E-LITE'
+      ],
+      igualQue: 'Frente a potato: aquí sí hay shader y gráficos completos. Frente a intermedia: los mismos mods menos DH y seis packs menos.',
       performance: {
         fps: 'mín. 129', media: '157',
         ram: 'mínimo 8 GB, recomendado 12 GB',
@@ -685,19 +714,33 @@ const ModpacksTab = ({ setActiveTab }) => {
       id: 'intermedia',
       title: 'Intermedia — el equilibrio',
       icon: <Eye size={40} className="text-emerald-400" />,
-      desc: 'La única con horizonte lejano. Distant Horizons va afinado para que cueste lo mínimo: un hilo en vez de cuatro, sin oclusión ambiental propia y con transparencia rápida. Eso solo subió la variante de 80 a 116 FPS, y el horizonte se ve igual de lejos.',
-      features: ['Los 69 mods del pack', 'Shader E-LITE con niebla y nubes', 'Distant Horizons radio 128', 'Render distance 10', 'Los 13 resource packs activos'],
+      desc: 'La única con horizonte lejano. Distant Horizons va afinado para que cueste lo mínimo: un hilo en vez de cuatro, sin oclusión ambiental propia y con transparencia rápida. Eso solo subió la variante de 80 a 98 FPS, y el horizonte se ve igual de lejos.',
+      features: [
+        'Los 69 mods, Distant Horizons incluido',
+        'Distant Horizons a radio 128 con la configuración barata',
+        'Shader E-LITE con niebla y nubes',
+        'Render distance 10, simulación 16',
+        'Los 13 resource packs activos, animaciones incluidas',
+        "Sildur's Enhanced Default Fast parcheado para iluminar los LODs: 95 FPS, alternativa a E-LITE"
+      ],
+      noLleva: [
+        'Los shaders pesados activados: Photon, BSL y Solas vienen dentro, pero el que arranca es E-LITE',
+        'El horizonte de calidad: radio 128 en vez de 300 (la calidad de los LODs es la misma que en calidad)',
+        'Render distance 11 de Minecraft: aquí va a 10'
+      ],
+      igualQue: 'Frente a rendimiento: aquí sí hay horizonte lejano y están los 13 resource packs.',
       performance: {
-        fps: 'mín. 95', media: '116',
+        fps: 'mín. 84', media: '98',
         ram: 'mínimo 8 GB, recomendado 12 GB',
         gpu: 'RTX 3050 Laptop',
         usage: 'GPU 92% · CPU 37% · RAM 7,8 GB · VRAM 1,2 GB',
-        dh: 'Activado (radio 128, configuración barata)',
+        dh: 'Activado (radio 128, calidad de LODs media)',
         resolution: '1080p'
       },
       screenshot: intermediaImg,
       capturas: [
-        { src: intermediaImg, label: 'E-LITE (por defecto)', fps: '116 FPS' }
+        { src: intermediaImg, label: 'E-LITE (por defecto)', fps: '98 FPS' },
+        { src: intermediaSildursImg, label: "Sildur's Enhanced Default Fast", fps: '95 FPS' }
       ],
       videos: [],
       downloadUrl: 'https://github.com/iaguito22/serverAgosto2026/releases/download/v1/intermedia.zip'
@@ -707,7 +750,15 @@ const ModpacksTab = ({ setActiveTab }) => {
       title: 'Calidad — lo más bonito',
       icon: <Sparkles size={40} className="text-emerald-400" />,
       desc: 'Tres shaders pesados configurados: Photon por defecto, con BSL y Solas listos para cambiar. Distant Horizons a 300 bloques, ahora con la configuración barata que también aquí sale gratis en FPS.',
-      features: ['Los 69 mods del pack', 'Photon (por defecto)', 'BSL y Solas incluidos', 'Distant Horizons radio 300', 'Render distance 11'],
+      features: [
+        'Los 69 mods, Distant Horizons incluido',
+        'Photon activado; BSL y Solas listos para cambiar',
+        'Distant Horizons a radio 300 con la configuración barata',
+        'Render distance 11, simulación 16',
+        'Los 13 resource packs activos, animaciones incluidas'
+      ],
+      noLleva: [],
+      igualQue: 'Es la variante completa: no se le ha quitado nada. Todo lo que las otras tres desactivan (Distant Horizons, los seis packs de animaciones y color, los shaders pesados) aquí está encendido.',
       performance: {
         fps: 'Photon 63 · BSL 57 · Solas 58', media: '63',
         ram: 'mínimo 8 GB, recomendado 12 GB',
@@ -795,12 +846,36 @@ const ModpacksTab = ({ setActiveTab }) => {
             </h4>
             <ul className="space-y-4 flex-1">
               {selectedPack.features.map((f, i) => (
-                <li key={i} className="flex items-center gap-3 text-secondary text-sm font-medium">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400/40"></div>
+                <li key={i} className="flex items-start gap-3 text-secondary text-sm font-medium">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400/40 mt-2 shrink-0"></div>
                   {f}
                 </li>
               ))}
             </ul>
+
+            {/* Lo que esta variante no lleva y las demás sí. Sin esto la lista de arriba no
+                dice nada: todas parecen iguales hasta que ves qué le falta a cada una. */}
+            {selectedPack.noLleva && selectedPack.noLleva.length > 0 && (
+              <div className="mt-8 pt-6 border-t border-white/5">
+                <h5 className="text-[11px] font-black uppercase tracking-widest text-slate-400 mb-4">
+                  No lleva (y otras variantes sí)
+                </h5>
+                <ul className="space-y-3">
+                  {selectedPack.noLleva.map((f, i) => (
+                    <li key={i} className="flex items-start gap-3 text-slate-400 text-sm">
+                      <X size={14} className="text-rose-400/70 mt-0.5 shrink-0" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {selectedPack.igualQue && (
+              <p className="mt-6 text-[12px] leading-relaxed text-slate-500">
+                {selectedPack.igualQue}
+              </p>
+            )}
           </div>
 
           {/* Performance Card */}
@@ -984,7 +1059,7 @@ const AboutTab = () => (
           </div>
           <div className="pt-4">
             <h4 className="text-emerald-400 font-bold flex items-center gap-2 mb-2"><Monitor size={18} /> Shaders</h4>
-            <p className="text-sm text-secondary">Iris con los cinco shaders instalados en las cuatro variantes: Photon, BSL, Solas, E-LITE y Sildur's Enhanced Default Fast, cada uno con su configuración ya ajustada. Sildur's es el más rápido, pero no ilumina los LODs de Distant Horizons y deja el horizonte lejano en negro: úsalo en rendimiento o potato, que van sin DH.</p>
+            <p className="text-sm text-secondary">Iris con los cinco shaders instalados en las cuatro variantes: Photon, BSL, Solas, E-LITE y Sildur's Enhanced Default Fast, cada uno con su configuración ya ajustada. Sildur's va parcheado para que ilumine los LODs de Distant Horizons (el original los dejaba en negro y el horizonte lejano se veía como una mancha), así que ya sirve en las cuatro variantes. Corre igual que E-LITE —medidos por parejas dan lo mismo, 157 en rendimiento y 95 en intermedia—, pero es más estable: menos tirones en el 5% de fotogramas peores. Cambia entre uno y otro en Iris según cuál te guste más, que en FPS te da igual.</p>
           </div>
         </div>
       </div>
