@@ -581,10 +581,8 @@ const PerformanceChart = ({ selectedPackId }) => {
   const perfData = {
     '1080p': [
       { packId: 'potato', name: 'Potato (sin shader)', fps: 285 },
-      { packId: 'rendimiento', name: 'Rendimiento (E-LITE)', fps: 157 },
-      { packId: 'rendimiento', name: "Rendimiento (Sildur's Fast)", fps: 157 },
-      { packId: 'intermedia', name: 'Intermedia (E-LITE + DH)', fps: 98 },
-      { packId: 'intermedia', name: "Intermedia (Sildur's Fast + DH)", fps: 95 },
+      { packId: 'rendimiento', name: "Rendimiento (E-LITE o Sildur's)", fps: 157 },
+      { packId: 'intermedia', name: "Intermedia (E-LITE o Sildur's + DH)", fps: 98 },
       { packId: 'calidad', name: 'Calidad (Photon)', fps: 63 },
       { packId: 'calidad', name: 'Calidad (Solas)', fps: 58 },
       { packId: 'calidad', name: 'Calidad (BSL)', fps: 57 }
@@ -638,6 +636,11 @@ const PerformanceChart = ({ selectedPackId }) => {
             );
           })}
         </div>
+        <p className="text-[11px] text-secondary mt-6 leading-relaxed">
+          E-LITE y Sildur's van en la misma barra porque miden lo mismo: alternando pasada a
+          pasada, una la gana cada uno (172 y 153 E-LITE contra 164 y 169 Sildur's). Elige entre
+          los dos por cómo se ven, no por FPS.
+        </p>
       </div>
     </div>
   );
