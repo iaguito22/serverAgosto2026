@@ -3,18 +3,20 @@
 ### 🌐 **[Ver la web → iaguito22.github.io/serverAgosto2026](https://iaguito22.github.io/serverAgosto2026/)**
 
 Modpack de Minecraft **1.21.11 (Fabric)** en cuatro variantes, con Terralith y Distant
-Horizons. Las cuatro llevan los mismos 69 mods: solo cambia la configuración.
+Horizons. Calidad e intermedia llevan los 69 mods; rendimiento y potato son las mismas menos
+Distant Horizons, que a esas distancias cuesta más de lo que da.
 
 | Variante | Shader | FPS medidos | Descarga |
 |---|---|---:|---|
-| **Calidad** | Photon (BSL y Solas incluidos) | 56 | [calidad.zip](https://github.com/iaguito22/serverAgosto2026/releases/download/v1/calidad.zip) |
-| **Intermedia** | E-LITE | 88 | [intermedia.zip](https://github.com/iaguito22/serverAgosto2026/releases/download/v1/intermedia.zip) |
-| **Rendimiento** | E-LITE ligero | 104 | [rendimiento.zip](https://github.com/iaguito22/serverAgosto2026/releases/download/v1/rendimiento.zip) |
-| **Potato** | ninguno | 140 | [potato.zip](https://github.com/iaguito22/serverAgosto2026/releases/download/v1/potato.zip) |
+| **Calidad** | Photon (BSL y Solas incluidos) | 63 | [calidad.zip](https://github.com/iaguito22/serverAgosto2026/releases/download/v1/calidad.zip) |
+| **Intermedia** | E-LITE | 116 | [intermedia.zip](https://github.com/iaguito22/serverAgosto2026/releases/download/v1/intermedia.zip) |
+| **Rendimiento** | E-LITE ligero | 157 | [rendimiento.zip](https://github.com/iaguito22/serverAgosto2026/releases/download/v1/rendimiento.zip) |
+| **Potato** | ninguno | 285 | [potato.zip](https://github.com/iaguito22/serverAgosto2026/releases/download/v1/potato.zip) |
 | Servidor | — | — | [servidor.zip](https://github.com/iaguito22/serverAgosto2026/releases/download/v1/servidor.zip) |
 
-Medidos a 1080p en una RTX 3050 Laptop **en modo ahorro**, con los 14 resource packs
-cargados (hasta ahora no lo estaban, y por eso las cifras anteriores eran optimistas). Cada zip trae instalador para
+Medidos a 1080p en una RTX 3050 Laptop **en modo juego**, con los resource packs cargados de
+verdad, en frío (cuatro minutos de enfriado antes de cada pasada) y con dos pasadas por
+configuración. Cada zip trae instalador para
 Windows y para Linux: lo descomprimes donde quieras, lo ejecutas, y él guarda tus carpetas
 actuales en una copia antes de poner las nuevas.
 

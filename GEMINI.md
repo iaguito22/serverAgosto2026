@@ -5,7 +5,7 @@ Lo que sigue no son manías: cada punto viene de un fallo real que costó horas 
 
 Proyecto: modpack de Minecraft **1.21.11 / Fabric Loader 0.19.3**, en cuatro variantes
 (calidad, intermedia, rendimiento, potato) más un zip de servidor. **67 mods de cliente,
-25 de servidor, 14 resource packs.**
+25 de servidor, 13 resource packs.**
 
 ---
 
@@ -124,9 +124,15 @@ jugador sus ajustes personales.
 **`mods-full` es lo que se distribuye, sin extras.** El mod de medida lo copia `bench.py`
 al vuelo. No lo metas ahí.
 
-**Las cuatro variantes llevan los mismos mods.** Lo único que cambia es la configuración
-(shader seleccionado, Distant Horizons, render distance). Si te ves quitando mods para
-hacer una variante más ligera, algo va mal.
+**Las variantes llevan los mismos mods menos Distant Horizons, que va solo en calidad e
+intermedia.** Lo demás es configuración (shader, render distance, qué packs vienen activos).
+`empaquetar.sh` quita el jar de DH en potato y rendimiento porque **el mod cobra un fijo por
+estar cargado y ese fijo no baja tocando el radio**: en intermedia, radio 200 y 128 miden lo
+mismo, y quitarlo entero sube de 80 a 127 FPS. Con horizontes cortos no se amortiza (potato
+171 con DH, 285 sin; rendimiento 141 con DH barata, 157 sin). Donde sí se queda, va con la
+config barata: 1 hilo, ratio 0.2, `enableSsao=false`, sin textura de ruido, transparencia
+`FAST`. Fuera de DH, si te ves quitando mods para aligerar una variante, algo va mal — está
+medido que quitar 14 mods de adorno la deja *peor*, no mejor.
 
 **El servidor solo lleva lo que necesita el servidor.** Un mod marcado
 `"environment": "client"` en su `fabric.mod.json` ni siquiera se carga ahí: no lo pongas.
@@ -146,4 +152,31 @@ excepciones.
 
 ---
 
-Última revisión: 16/08/2026. Si algo de aquí ya no es cierto, corrígelo en este fichero.
+## Medir sin engañarte
+
+**Mide en frío, y entre pasada y pasada también.** Una tanda entera salió un 10% por debajo
+de otra idéntica media hora antes, con Tctl a 97,5 °C y la GPU caída de 1950 a 1762 MHz. Peor
+aún: una tanda que empezó a 43 °C y acabó a 98 dio dos conclusiones falsas (que bajar el radio
+de DH daba +22%, y que quitar packs de flora *costaba* un 12%). Copia el patrón de
+`tandaOBJ2.sh`: cuatro minutos de enfriado ANTES de cada pasada, dos pasadas por
+configuración, y la temperatura anotada en cada una. A 46 °C los números son repetibles.
+
+**El mundo de pruebas trae los LODs en un sqlite.** Cambiar la calidad o el radio de DH
+invalida ese caché y el mod lo reconstruye durante la medida: la configuración "más barata"
+sale peor que la cara. Para comparar calidades de DH hay que recalentar el mundo.
+
+**El campo `ventana` de `results.jsonl` no significa nada** (lee el tamaño mientras la
+ventana se mapea). El tamaño real es `ancho`/`alto`.
+
+**Lo que cuesta son los resource packs, y solo sin shader.** Con los ajustes de potato: solo
+Fabric API 312 FPS, los 68 mods 295, los 68 mods con los 13 packs 177. Quitando los cuatro de
+animación de entidad se pasa de 174/191 a 243/244; los dos de colormaps, a 240/234. Pero en
+intermedia y calidad esos mismos recortes dan **exactamente los mismos FPS**: con shader manda
+la GPU. Por eso potato y rendimiento traen 7 packs activos de 13 y las otras dos los 13.
+
+**Sildur's Enhanced Default Fast no ilumina los LODs de DH**: horizonte lejano en negro. Es el
+shader más rápido de los cinco, pero solo vale en potato y rendimiento, que van sin DH.
+
+---
+
+Última revisión: 18/08/2026. Si algo de aquí ya no es cierto, corrígelo en este fichero.
