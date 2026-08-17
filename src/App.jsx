@@ -14,6 +14,7 @@ import calBslImg from './assets/calidad-bsl.png';
 import calPhotonImg from './assets/calidad-photon.png';
 import calSolasImg from './assets/calidad-solas.png';
 import intermediaSildursImg from './assets/intermedia-sildurs.png';
+import rendSildursImg from './assets/rendimiento-sildurs.png';
 import './index.css';
 
 // --- COMPONENTS ---
@@ -705,7 +706,8 @@ const ModpacksTab = ({ setActiveTab }) => {
       },
       screenshot: rendimientoImg,
       capturas: [
-        { src: rendimientoImg, label: 'E-LITE (por defecto)', fps: '157 FPS' }
+        { src: rendimientoImg, label: 'E-LITE (por defecto)', fps: '157 FPS' },
+        { src: rendSildursImg, label: "Sildur's Enhanced Default Fast", fps: '157 FPS' }
       ],
       videos: [],
       downloadUrl: 'https://github.com/iaguito22/serverAgosto2026/releases/download/v1/rendimiento.zip'

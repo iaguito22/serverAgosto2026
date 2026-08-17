@@ -174,8 +174,13 @@ animación de entidad se pasa de 174/191 a 243/244; los dos de colormaps, a 240/
 intermedia y calidad esos mismos recortes dan **exactamente los mismos FPS**: con shader manda
 la GPU. Por eso potato y rendimiento traen 7 packs activos de 13 y las otras dos los 13.
 
-**Sildur's Enhanced Default Fast no ilumina los LODs de DH**: horizonte lejano en negro. Es el
-shader más rápido de los cinco, pero solo vale en potato y rendimiento, que van sin DH.
+**Sildur's Enhanced Default Fast va PARCHEADO** (`modpacks/perf-1.21.11/parche-sildurs.py`). El
+original no ilumina los LODs de DH y deja el horizonte lejano en negro, porque Iris no le pasa
+el lightmap en los programas `dh_*`; el parche calcula la luz desde `lmcoord` a mano en
+`dh_terrain.fsh` y `dh_water.fsh`. Con eso vale en las cuatro variantes. El zip parcheado se
+llama igual que el original a propósito, para que su `.txt` de ajustes le siga aplicando.
+No es más rápido que E-LITE: medidos por parejas alternadas empatan (163 contra 166). Lo que sí
+repite en las dos parejas es un p5 mejor, o sea que va algo más liso.
 
 ---
 
