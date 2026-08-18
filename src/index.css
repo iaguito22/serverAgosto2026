@@ -2411,3 +2411,335 @@ h3 {
   border-color: rgba(16, 185, 129, 0.15) !important;
   color: #10b981 !important;
 }
+/* --- Bloque de hardware de cada variante ---------------------------------
+   Visual a proposito: la gente busca SU tarjeta en una lista y una cifra
+   grande de nucleos, no un parrafo. El porque (Sodium y sus hilos) va
+   plegado debajo. */
+
+.hw-box {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.4rem !important;
+  padding: 1.5rem 1.25rem !important;
+  border-radius: 1rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  background: rgba(15, 23, 42, 0.45) !important;
+}
+
+.hw-titulo {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.45rem !important;
+  font-size: 0.65rem !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.12em !important;
+  color: #34d399 !important;
+}
+
+.hw-cifra {
+  font-size: 2rem !important;
+  font-weight: 900 !important;
+  line-height: 1.05 !important;
+  color: #fff !important;
+  font-variant-numeric: tabular-nums !important;
+  padding-top: 0.35rem !important;
+}
+
+.hw-sub {
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  color: #cbd5e1 !important;
+}
+
+.hw-pie {
+  font-size: 0.75rem !important;
+  color: #94a3b8 !important;
+  margin-top: auto !important;
+  padding-top: 0.75rem !important;
+}
+
+.hw-chips {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.35rem !important;
+  padding-top: 0.6rem !important;
+}
+
+.hw-chip {
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  padding: 0.25rem 0.6rem !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(16, 185, 129, 0.25) !important;
+  background: rgba(16, 185, 129, 0.08) !important;
+  color: #a7f3d0 !important;
+  white-space: nowrap !important;
+}
+
+.hw-chip-mas {
+  border-style: dashed !important;
+  border-color: rgba(148, 163, 184, 0.3) !important;
+  background: transparent !important;
+  color: #94a3b8 !important;
+}
+
+.hw-aviso {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 0.45rem !important;
+  font-size: 0.75rem !important;
+  line-height: 1.45 !important;
+  color: #fbbf24 !important;
+  margin-top: auto !important;
+  padding-top: 0.9rem !important;
+}
+
+:root.light .hw-box {
+  background: rgba(255, 255, 255, 0.6) !important;
+  border-color: rgba(20, 184, 166, 0.12) !important;
+}
+
+:root.light .hw-cifra { color: #0f172a !important; }
+:root.light .hw-sub { color: #334155 !important; }
+:root.light .hw-pie { color: #64748b !important; }
+:root.light .hw-titulo { color: #059669 !important; }
+:root.light .hw-chip { color: #047857 !important; }
+:root.light .hw-chip-mas { color: #64748b !important; }
+:root.light .hw-aviso { color: #b45309 !important; }
+
+.hw-vram {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: baseline !important;
+  gap: 0.4rem !important;
+  font-size: 0.75rem !important;
+  color: #94a3b8 !important;
+  margin-top: auto !important;
+  padding-top: 0.9rem !important;
+}
+
+.hw-vram b { color: #e2e8f0 !important; font-weight: 900 !important; }
+.hw-vram-sep { opacity: 0.4 !important; }
+
+.hw-vram-eti {
+  font-size: 0.65rem !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.12em !important;
+  color: #64748b !important;
+  width: 100% !important;
+}
+
+:root.light .hw-vram { color: #64748b !important; }
+:root.light .hw-vram b { color: #0f172a !important; }
+
+.hw-eyebrow {
+  font-size: 0.7rem !important;
+  color: #94a3b8 !important;
+  font-weight: 600 !important;
+  padding-top: 0.15rem !important;
+}
+
+.hw-chip-lg {
+  font-size: 0.8rem !important;
+  padding: 0.35rem 0.75rem !important;
+  color: #d1fae5 !important;
+  border-color: rgba(16, 185, 129, 0.35) !important;
+  background: rgba(16, 185, 129, 0.12) !important;
+}
+
+.hw-cifra-sm { font-size: 1.65rem !important; padding-top: 0 !important; }
+
+/* En columna, no en fila: el recomendado va DEBAJO del minimo, que es el orden en que se
+   leen (primero con cuanto arrancas, luego a cuanto conviene subir). */
+.hw-ram-fila {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.5rem !important;
+  padding-top: 0.75rem !important;
+}
+
+.hw-ram-item {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.15rem !important;
+  padding: 0.55rem 0.9rem !important;
+  border-radius: 0.75rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+}
+
+.hw-ram-rec {
+  border-color: rgba(16, 185, 129, 0.4) !important;
+  background: rgba(16, 185, 129, 0.1) !important;
+}
+
+.hw-ram-eti {
+  font-size: 0.65rem !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  color: #94a3b8 !important;
+}
+
+.hw-ram-rec .hw-ram-eti { color: #34d399 !important; }
+.hw-ram-rec .hw-cifra { color: #6ee7b7 !important; }
+:root.light .hw-ram-rec .hw-cifra { color: #047857 !important; }
+
+:root.light .hw-eyebrow { color: #64748b !important; }
+:root.light .hw-chip-lg { color: #047857 !important; }
+:root.light .hw-ram-item { background: rgba(15, 23, 42, 0.03) !important; }
+:root.light .hw-ram-rec { background: rgba(16, 185, 129, 0.1) !important; }
+:root.light .hw-ram-eti { color: #64748b !important; }
+:root.light .hw-ram-rec .hw-ram-eti { color: #059669 !important; }
+
+/* --- Aviso de mando en la portada --- */
+.home-mando {
+  display: flex !important;
+  align-items: center !important;
+  gap: 1rem !important;
+  max-width: 40rem !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding: 1rem 1.4rem !important;
+  border-radius: 1rem !important;
+  border: 1px solid rgba(16, 185, 129, 0.28) !important;
+  background: rgba(16, 185, 129, 0.07) !important;
+}
+
+.home-mando-icono {
+  flex-shrink: 0 !important;
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 999px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #34d399 !important;
+  background: rgba(16, 185, 129, 0.14) !important;
+}
+
+:root.light .home-mando { background: rgba(16, 185, 129, 0.08) !important; }
+:root.light .home-mando .text-white { color: #0f172a !important; }
+:root.light .home-mando-icono { color: #059669 !important; }
+
+/* --- Chips del uso del sistema (bloque de rendimiento) --- */
+.perf-chip {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  padding: 0.25rem 0.6rem !important;
+  border-radius: 999px !important;
+  color: #cbd5e1 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  font-variant-numeric: tabular-nums !important;
+}
+
+:root.light .perf-chip {
+  color: #334155 !important;
+  border-color: rgba(15, 23, 42, 0.1) !important;
+  background: rgba(15, 23, 42, 0.03) !important;
+}
+
+/* --- Bloque de optimizacion (pestaña El Mundo) --- */
+/* Cada apartado es una tarjeta con su propio aire; antes iba todo pegado y no se veia
+   donde acababa uno y empezaba el siguiente. */
+.opt-apartado {
+  padding: 1.6rem !important;
+  border-radius: 1.25rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: rgba(255, 255, 255, 0.015) !important;
+}
+
+.opt-cabecera {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.6rem !important;
+  font-size: 1.05rem !important;
+  font-weight: 900 !important;
+  color: #f1f5f9 !important;
+  margin-bottom: 0.9rem !important;
+}
+
+.opt-lista {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.6rem !important;
+}
+
+.opt-fila {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 1rem !important;
+  padding: 0.9rem 1rem !important;
+  border-radius: 0.9rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  background: rgba(255, 255, 255, 0.025) !important;
+}
+
+.opt-pos {
+  flex-shrink: 0 !important;
+  width: 26px !important;
+  height: 26px !important;
+  border-radius: 999px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0.75rem !important;
+  font-weight: 900 !important;
+  color: #34d399 !important;
+  background: rgba(16, 185, 129, 0.14) !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+
+.opt-nombre {
+  font-size: 0.95rem !important;
+  font-weight: 800 !important;
+  color: #f1f5f9 !important;
+  line-height: 1.35 !important;
+}
+
+.opt-detalle {
+  font-size: 0.82rem !important;
+  color: #94a3b8 !important;
+  line-height: 1.55 !important;
+  margin-top: 0.25rem !important;
+}
+
+.opt-pct {
+  flex-shrink: 0 !important;
+  margin-left: auto !important;
+  font-size: 0.85rem !important;
+  font-weight: 900 !important;
+  color: #6ee7b7 !important;
+  font-variant-numeric: tabular-nums !important;
+  white-space: nowrap !important;
+}
+
+.opt-pct-nulo { color: #64748b !important; }
+
+@media (max-width: 640px) {
+  .opt-fila { flex-wrap: wrap !important; }
+  .opt-pct { margin-left: 0 !important; }
+}
+
+:root.light .opt-apartado { background: rgba(15, 23, 42, 0.02) !important; border-color: rgba(15, 23, 42, 0.08) !important; }
+:root.light .opt-cabecera { color: #0f172a !important; }
+:root.light .opt-fila { background: rgba(15, 23, 42, 0.02) !important; border-color: rgba(15, 23, 42, 0.07) !important; }
+:root.light .opt-nombre { color: #0f172a !important; }
+:root.light .opt-detalle { color: #475569 !important; }
+:root.light .opt-pos { color: #059669 !important; }
+:root.light .opt-pct { color: #047857 !important; }
+:root.light .opt-pct-nulo { color: #64748b !important; }
+
+/* Cabecera de apartado cuando es un boton plegable */
+.opt-cabecera-btn {
+  font-size: 1.05rem !important;
+  font-weight: 900 !important;
+  color: #f1f5f9 !important;
+  transition: color .2s !important;
+}
+.opt-cabecera-btn:hover { color: #6ee7b7 !important; }
+:root.light .opt-cabecera-btn { color: #0f172a !important; }
+:root.light .opt-cabecera-btn:hover { color: #047857 !important; }

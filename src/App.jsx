@@ -4,7 +4,7 @@ import {
   Shield, Zap, Cpu, Eye, ArrowLeft, ChevronLeft,
   Gamepad2, Info, Copy, Check, Users, Sparkles, Sun, Moon,
   HardDrive, Wifi, Clock, Menu, X, RefreshCw,
-  Wrench, Plane, Skull, ShieldAlert, Terminal, AlertTriangle, Box, Settings
+  Wrench, Plane, Skull, ShieldAlert, Terminal, AlertTriangle, Box, Settings, TrendingUp
 } from 'lucide-react';
 import potatoImg from './assets/potato.png';
 import rendimientoImg from './assets/rendimiento.png';
@@ -263,6 +263,19 @@ const HomeTab = ({ setActiveTab }) => (
       <button className="btn btn-outline px-8 py-6 text-lg" onClick={() => setActiveTab('servidor')}>
         <Server size={22} /> Información del server
       </button>
+    </div>
+
+    {/* Lo del mando va aparte y destacado: es de lo que mas convence y antes estaba
+        enterrado en un bloque de la pestaña del mundo. */}
+    <div className="home-mando mt-10">
+      <div className="home-mando-icono"><Gamepad2 size={26} /></div>
+      <div className="text-left">
+        <div className="text-base font-black text-white">El mejor servidor de Minecraft para jugar con mando</div>
+        <div className="text-sm text-secondary leading-snug">
+          Controlify va integrado y configurado: conecta un mando de Xbox, PlayStation o Switch
+          y lo coge solo, con vibración e interfaz adaptada. Sin tocar nada.
+        </div>
+      </div>
     </div>
   </div>
 );
@@ -648,13 +661,228 @@ const PerformanceChart = ({ selectedPackId }) => {
   );
 };
 
+// Bloque de hardware de cada variante.
+//
+// Lo unico MEDIDO aqui es la columna de la RTX 3050 Laptop a 1080p que ya sale arriba. Las
+// equivalencias de GPU son una estimacion escalando desde ella, y asi se dicen: "para ~60
+// FPS hace falta como una X". No se pone un numero de FPS por tarjeta porque seria inventado.
+//
+// La parte de CPU si es medida y es la que no cuenta ninguna web: el 18/08/2026 se comprobo
+// que estando quieto el cuello NO es la GPU ni Distant Horizons, es Sodium construyendo la
+// malla a ~40 secciones/s. Los chunks del render distance ya estan a los 5-6 s; quitar DH
+// entero no adelanta la carga ni un segundo (21 s con y sin el) aunque los FPS pasen de 46 a
+// 86. Y Sodium reparte sus hilos de construccion solo, sin opcion que tocar:
+//     clamp(max(nucleos/3, nucleos-6), 1, 10)
+// Por eso un PC de 8 hilos se queda con 2 constructores contra los 10 de uno de 16, y el
+// terreno tarda ~5 veces mas en entrar aunque los FPS sean buenos. Las secciones crecen con
+// el CUADRADO del render distance, asi que bajarlo es la unica palanca real (11 -> 8 deja el
+// 53% del terreno; 11 -> 6, el 30%).
+//
+// Caso real confirmado: un i5 9600K son 6 nucleos SIN hyperthreading, o sea 6 hilos ->
+// max(2, 0) = 2 constructores. Con una 1660 Super da los mismos FPS que la 3050 Laptop de
+// las pruebas y aun asi el terreno no termina de entrar. Es exactamente lo que predice la
+// formula, y por eso la tabla va por HILOS y no por nucleos.
+const HILOS_SODIUM = [
+  { hilos: '4 hilos', ejemplo: '2 núcleos con HT', constructores: 1 },
+  { hilos: '6 hilos', ejemplo: '6 núcleos sin HT, tipo i5 9600K', constructores: 2 },
+  { hilos: '8 hilos', ejemplo: '4 núcleos con HT', constructores: 2 },
+  { hilos: '12 hilos', ejemplo: '6 núcleos con HT', constructores: 6 },
+  { hilos: '16 hilos', ejemplo: '8 núcleos con HT', constructores: 10 }
+];
+
+// Plegable reutilizable: el mismo chisme que ya tenia el bloque de hardware, sacado aparte
+// porque ahora hay varios.
+// `grande` es para los apartados de optimizacion, donde la cabecera es el titulo del
+// apartado y no una nota al pie como en el bloque de hardware.
+const Desplegable = ({ titulo, icono, grande, children }) => {
+  const [abierto, setAbierto] = useState(false);
+  return (
+    <div>
+      <button
+        onClick={() => setAbierto(!abierto)}
+        className={grande
+          ? 'flex items-center gap-2.5 w-full text-left opt-cabecera-btn'
+          : 'flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-emerald-400 hover:text-emerald-300 transition-colors text-left'}
+        style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+      >
+        <ChevronRight
+          size={grande ? 18 : 14}
+          className={`shrink-0 ${grande ? 'text-emerald-400' : ''}`}
+          style={{ transform: abierto ? 'rotate(90deg)' : 'none', transition: 'transform .2s' }}
+        />
+        {icono}
+        {titulo}
+      </button>
+      {abierto && <div className={`${grande ? 'mt-7' : 'mt-6'} space-y-4 animate-enter`}>{children}</div>}
+    </div>
+  );
+};
+
+// Tabla de datos medidos, con el mismo aire que la de los hilos de Sodium.
+const TablaMedida = ({ cabeceras, filas }) => (
+  <div className="overflow-x-auto">
+    <table className="text-sm w-full max-w-xl" style={{ borderCollapse: 'collapse' }}>
+      <thead>
+        <tr className="text-[11px] uppercase tracking-wider text-slate-500 font-black">
+          {cabeceras.map((c, i) => (
+            <th key={c} className={`pb-2 ${i === 0 ? 'text-left pr-6' : 'text-left pr-6'}`}>{c}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody style={{ fontVariantNumeric: 'tabular-nums' }}>
+        {filas.map((f) => (
+          <tr key={f[0]} className="border-t border-white/5">
+            {f.map((celda, i) => (
+              <td key={i} className={`py-2 pr-6 ${i === 0 ? 'text-secondary' : 'text-slate-200 font-bold'}`}>{celda}</td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
+
+const HardwareCard = ({ hw }) => {
+  const [abierto, setAbierto] = useState(false);
+  if (!hw) return null;
+
+  return (
+    <div className="glass-card !p-8 md:!p-10 border-white/5 bg-slate-900/40 relative overflow-hidden mb-12">
+      <div className="absolute top-4 left-3 w-1.5 h-[calc(100%-32px)] bg-emerald-500/40 rounded-full"></div>
+      <h4 className="text-sm font-black uppercase tracking-widest text-white mb-8 flex items-center gap-2">
+        <Monitor className="text-emerald-400" size={18} /> Hardware recomendado
+      </h4>
+
+      <div className="grid md:grid-cols-3 gap-6">
+        {/* GRAFICA: aqui el foco son los MODELOS, que es lo que la gente busca. Los 60 FPS
+            son solo la condicion, van de eyebrow pequeño. */}
+        <div className="hw-box">
+          <span className="hw-titulo"><Monitor size={13} /> Gráfica</span>
+          <span className="hw-eyebrow">Para 60 FPS a 1080p</span>
+          <div className="hw-chips">
+            {hw.gpus.map((g) => <span key={g} className="hw-chip hw-chip-lg">{g}</span>)}
+            <span className="hw-chip hw-chip-mas">y superiores</span>
+          </div>
+          <div className="hw-vram">
+            <span className="hw-vram-eti">VRAM</span>
+            <span><b>{hw.vramMin}</b> mínimo</span>
+            <span className="hw-vram-sep">·</span>
+            <span><b>{hw.vramRec}</b> recomendado</span>
+          </div>
+        </div>
+
+        {/* PROCESADOR: al reves que la grafica, aqui el foco SI son los nucleos, porque es
+            lo que decide cuando aparece el terreno. Los modelos van debajo de apoyo. */}
+        <div className="hw-box">
+          <span className="hw-titulo"><Cpu size={13} /> Procesador</span>
+          <div className="hw-cifra">{hw.cpuNucleos}</div>
+          <div className="hw-sub">{hw.cpuHilos}</div>
+          <div className="hw-chips">
+            {hw.cpus.map((c) => <span key={c} className="hw-chip">{c}</span>)}
+            <span className="hw-chip hw-chip-mas">y superiores</span>
+          </div>
+          <div className="hw-aviso">
+            <AlertTriangle size={13} className="shrink-0 mt-0.5" />
+            <span>{hw.cpuAviso}</span>
+          </div>
+        </div>
+
+        {/* RAM: en columna y con la etiqueta encima del numero. El recomendado resaltado,
+            que es el que hay que mirar. */}
+        <div className="hw-box">
+          <span className="hw-titulo"><HardDrive size={13} /> RAM al juego</span>
+          <span className="hw-eyebrow">En el launcher, no la del PC</span>
+          <div className="hw-ram-fila">
+            <div className="hw-ram-item">
+              <div className="hw-ram-eti">mínimo</div>
+              <div className="hw-cifra hw-cifra-sm">6 GB</div>
+            </div>
+            <div className="hw-ram-item hw-ram-rec">
+              <div className="hw-ram-eti">recomendado</div>
+              <div className="hw-cifra hw-cifra-sm">8 GB</div>
+            </div>
+            <div className="hw-ram-item">
+              <div className="hw-ram-eti">ideal</div>
+              <div className="hw-cifra hw-cifra-sm">10 GB</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* El detalle de por que la CPU manda en la carga del terreno. Plegado porque es largo
+          y no todo el mundo lo necesita, pero es lo unico que explica "me va a 100 FPS y el
+          terreno no acaba de aparecer". */}
+      <div className="mt-8 pt-6 border-t border-white/5">
+        <button
+          onClick={() => setAbierto(!abierto)}
+          className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-emerald-400 hover:text-emerald-300 transition-colors"
+          style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+        >
+          <ChevronRight size={14} style={{ transform: abierto ? 'rotate(90deg)' : 'none', transition: 'transform .2s' }} />
+          Por qué el procesador decide cuándo aparece el terreno
+        </button>
+
+        {abierto && (
+          <div className="mt-5 space-y-4 animate-enter">
+            <p className="text-sm text-secondary leading-relaxed">
+              Si el terreno tarda en salir, casi nunca es la gráfica ni Distant Horizons.
+              Está medido: parado, los chunks del render distance entero ya están cargados
+              a los <span className="theme-text-primary font-bold">5-6 segundos</span>, pero
+              Sodium sigue construyendo la malla a unas 40 secciones por segundo hasta el
+              segundo 22. Quitando Distant Horizons <span className="theme-text-primary font-bold">entero</span> la
+              carga no se adelantó ni un segundo (21 s con él y sin él), aunque los FPS
+              pasaran de 46 a 86. O sea: no falta terreno, falta quién lo malle.
+            </p>
+            <p className="text-sm text-secondary leading-relaxed">
+              Y eso lo hace la CPU. Sodium reparte sus hilos de construcción solo, sin ninguna
+              opción que puedas tocar, con <code className="text-emerald-300">máx(núcleos/3, núcleos−6)</code>,
+              tope 10:
+            </p>
+
+            <div className="overflow-x-auto">
+              <table className="text-sm w-full max-w-md" style={{ borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr className="text-[11px] uppercase tracking-wider text-slate-500 font-black">
+                    <th className="text-left pb-2 pr-6">Tu procesador</th>
+                    <th className="text-left pb-2">Hilos construyendo</th>
+                  </tr>
+                </thead>
+                <tbody style={{ fontVariantNumeric: 'tabular-nums' }}>
+                  {HILOS_SODIUM.map((f) => (
+                    <tr key={f.hilos} className="border-t border-white/5">
+                      <td className="py-2 pr-6 text-secondary">
+                        <span className="text-slate-200 font-bold">{f.hilos}</span>
+                        <span className="block text-[11px] text-slate-500">{f.ejemplo}</span>
+                      </td>
+                      <td className="py-2 text-slate-200 font-bold align-top">{f.constructores}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <p className="text-sm text-secondary leading-relaxed">
+              De 10 a 2 hay cinco veces menos trabajo por segundo, y por eso en un PC justo el
+              terreno no termina de entrar aunque los FPS vayan bien. No lo arregla ningún mod.
+              Lo único que funciona es <span className="theme-text-primary font-bold">bajar la distancia de renderizado</span>,
+              porque el terreno a construir crece con el cuadrado: de 11 a 8 chunks queda el
+              53% del trabajo, y de 11 a 6, el 30%. Eso último es cuenta, no medida: lo medido
+              es el ritmo al que Sodium construye, que no cambia.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const ModpacksTab = ({ setActiveTab }) => {
   const packs = {
     potato: {
       id: 'potato',
       title: 'Potato — máximos FPS',
       icon: <Zap size={40} className="text-emerald-400" />,
-      desc: 'Sin shaders, sin Distant Horizons y con los resource packs más caros desactivados. Casi triplica lo que daba antes. A cambio no hay horizonte lejano ni animaciones de mobs, pero la distancia de visión es de 8 chunks y todo lo demás sigue en su sitio.',
+      desc: 'Sin shader, sin Distant Horizons y sin los resource packs caros. Distancia de visión 8; el resto del mundo, igual que en las demás.',
       features: [
         '68 mods: todos menos Distant Horizons',
         'Sin shader activado (los 5 vienen igual en el zip)',
@@ -677,6 +905,16 @@ const ModpacksTab = ({ setActiveTab }) => {
         dh: 'No incluido',
         resolution: '1080p'
       },
+      hardware: {
+        gpus: ['GTX 1050', 'RX 560', 'Intel UHD 630', 'Vega 8', 'Iris Xe'],
+        vramMin: '2 GB',
+        vramRec: '4 GB',
+        vramMedida: '0,5 GB',
+        cpus: ['i3-8100', 'Ryzen 3 2200G', 'i5-7400'],
+        cpuNucleos: '2 núcleos',
+        cpuHilos: '4 hilos',
+        cpuAviso: 'Con menos, poco más se puede quitar: ya va sin shader ni horizonte lejano.'
+      },
       screenshot: potatoImg,
       capturas: [ { src: potatoImg, label: 'Sin shader', fps: '285 FPS' } ],
       videos: [],
@@ -686,7 +924,7 @@ const ModpacksTab = ({ setActiveTab }) => {
       id: 'rendimiento',
       title: 'Rendimiento — fluidez con shaders',
       icon: <Cpu size={40} className="text-emerald-400" />,
-      desc: 'Shader ligero E-LITE y nada de Distant Horizons: por el horizonte lejano pagaba un 15% de FPS y aquí manda la fluidez. Los resource packs más caros vienen desactivados. Si quieres horizonte, esa es la variante intermedia.',
+      desc: 'Shader ligero E-LITE, sin Distant Horizons y con los resource packs más caros desactivados. Si quieres horizonte lejano, ve a intermedia.',
       features: [
         '68 mods: todos menos Distant Horizons',
         'Shader E-LITE activado, con niebla',
@@ -709,6 +947,16 @@ const ModpacksTab = ({ setActiveTab }) => {
         dh: 'No incluido',
         resolution: '1080p'
       },
+      hardware: {
+        gpus: ['GTX 1050 Ti', 'GTX 1650', 'RX 570', 'RX 580', 'Arc A380'],
+        vramMin: '2 GB',
+        vramRec: '4 GB',
+        vramMedida: '0,9 GB',
+        cpus: ['i3-12100', 'Ryzen 3 3300X', 'i5-8400', 'Ryzen 5 2600'],
+        cpuNucleos: '4 núcleos',
+        cpuHilos: '8 hilos',
+        cpuAviso: 'Aquí manda la gráfica: con distancia de renderizado 8 el terreno se renderiza rápido aunque la CPU sea justa.'
+      },
       screenshot: rendimientoImg,
       capturas: [
         { src: rendimientoImg, label: 'E-LITE (por defecto)', fps: '157 FPS' },
@@ -721,7 +969,7 @@ const ModpacksTab = ({ setActiveTab }) => {
       id: 'intermedia',
       title: 'Intermedia — el equilibrio',
       icon: <Eye size={40} className="text-emerald-400" />,
-      desc: 'La única con horizonte lejano. Distant Horizons va afinado para que cueste lo mínimo: un hilo en vez de cuatro, sin oclusión ambiental propia y con transparencia rápida. Eso solo subió la variante de 80 a 98 FPS, y el horizonte se ve igual de lejos.',
+      desc: 'Distant Horizons con shader ligero y los 13 resource packs activos. El horizonte va afinado para que cueste lo mínimo y se vea igual de lejos.',
       features: [
         'Los 69 mods, Distant Horizons incluido',
         'Distant Horizons a radio 128 con la configuración barata',
@@ -744,6 +992,16 @@ const ModpacksTab = ({ setActiveTab }) => {
         dh: 'Activado (radio 128, calidad de LODs media)',
         resolution: '1080p'
       },
+      hardware: {
+        gpus: ['GTX 1650 Super', 'GTX 1060 6 GB', 'RX 580 8 GB', 'RX 5500 XT'],
+        vramMin: '2 GB',
+        vramRec: '4 GB',
+        vramMedida: '1,2 GB',
+        cpus: ['Ryzen 5 3600', 'Ryzen 5 5600', 'i5-10400', 'i5-11400'],
+        cpuNucleos: '6 núcleos',
+        cpuHilos: '12 hilos',
+        cpuAviso: 'Con menos hilos el terreno tarda más en renderizarse. Bajar la distancia de renderizado de 10 a 8 ayuda: se renderiza en torno a un 35% más rápido.'
+      },
       screenshot: intermediaImg,
       capturas: [
         { src: intermediaImg, label: 'E-LITE (por defecto)', fps: '98 FPS' },
@@ -756,7 +1014,7 @@ const ModpacksTab = ({ setActiveTab }) => {
       id: 'calidad',
       title: 'Calidad — lo más bonito',
       icon: <Sparkles size={40} className="text-emerald-400" />,
-      desc: 'Tres shaders pesados configurados: Photon por defecto, con BSL y Solas listos para cambiar. Distant Horizons a 300 bloques, ahora con la configuración barata que también aquí sale gratis en FPS.',
+      desc: 'Tres shaders pesados configurados: Photon por defecto, con BSL y Solas listos para cambiar. Distant Horizons a 300 bloques.',
       features: [
         'Los 69 mods, Distant Horizons incluido',
         'Photon activado; BSL y Solas listos para cambiar',
@@ -773,6 +1031,16 @@ const ModpacksTab = ({ setActiveTab }) => {
         usage: 'GPU 79% · CPU 41% · RAM 7,4 GB · VRAM 1,1 GB',
         dh: 'Activado (radio 300)',
         resolution: '1080p'
+      },
+      hardware: {
+        gpus: ['RTX 3050', 'GTX 1660 Super', 'RTX 2060', 'RX 5600 XT', 'Arc A750'],
+        vramMin: '2 GB',
+        vramRec: '4 GB',
+        vramMedida: '1,1 GB',
+        cpus: ['Ryzen 7 5700X', 'i7-11700', 'i5-12600K', 'Ryzen 7 3700X'],
+        cpuNucleos: '8 núcleos',
+        cpuHilos: '16 hilos',
+        cpuAviso: 'Con menos hilos el terreno tarda más en renderizarse. Bajar la distancia de renderizado de 11 a 8 ayuda: se renderiza en torno a un 45% más rápido.'
       },
       screenshot: calidadImg,
       capturas: [
@@ -844,7 +1112,7 @@ const ModpacksTab = ({ setActiveTab }) => {
 
         <p className="text-lg text-secondary mb-8">{selectedPack.desc}</p>
 
-        <div className="flex flex-col md:flex-row gap-8 mb-12 items-stretch w-full px-4">
+        <div className="flex flex-col md:flex-row gap-8 mb-12 items-stretch w-full">
           {/* Content Card */}
           <div className="flex-1 glass-card !p-8 md:!p-10 border-white/5 bg-slate-900/40 relative overflow-hidden flex flex-col">
             <div className="absolute top-4 left-3 w-1.5 h-[calc(100%-32px)] bg-emerald-500/40 rounded-full"></div>
@@ -902,7 +1170,7 @@ const ModpacksTab = ({ setActiveTab }) => {
                   <div className="space-y-2">
                     <div className="flex flex-col">
                       <span className="text-label">Promedio:</span>
-                      <div className="text-5xl font-black text-white leading-none pt-2">
+                      <div className="text-5xl font-black text-white leading-none pt-2" style={{ fontVariantNumeric: 'tabular-nums' }}>
                         {selectedPack.performance.media} <span className="text-[12px] text-slate-500 uppercase">fps</span>
                       </div>
                     </div>
@@ -916,13 +1184,15 @@ const ModpacksTab = ({ setActiveTab }) => {
 
               {/* Technical Specs */}
               <div className="grid grid-cols-2 gap-y-6 gap-x-8 pt-6 border-t border-white/5">
-                <div className="flex flex-col gap-1 col-span-2 mb-2">
-                  <span className="text-label text-emerald-400">RAM (Prueba):</span>
-                  <span className="text-xl text-white font-black">{selectedPack.performance.ram}</span>
-                </div>
-                <div className="flex flex-col gap-1">
+                {/* El uso del sistema venia en una linea sola y se leia fatal. Partido en
+                    chips por el separador que ya traia el dato. */}
+                <div className="flex flex-col gap-2 col-span-2">
                   <span className="text-label">Uso Sistema:</span>
-                  <span className="text-value">{selectedPack.performance.usage}</span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {selectedPack.performance.usage.split('·').map((u) => (
+                      <span key={u} className="perf-chip">{u.trim()}</span>
+                    ))}
+                  </div>
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-label">DH Mod:</span>
@@ -937,7 +1207,9 @@ const ModpacksTab = ({ setActiveTab }) => {
           </div>
         </div>
 
-        <div className="w-full mb-12 mt-10 px-4">
+        <HardwareCard hw={selectedPack.hardware} />
+
+        <div className="w-full mb-12">
           {selectedPack.capturas && selectedPack.capturas.length > 0 ? (
             <ImageCarousel imagenes={selectedPack.capturas} />
           ) : selectedPack.videos && selectedPack.videos.length > 0 ? (
@@ -969,7 +1241,16 @@ const ModpacksTab = ({ setActiveTab }) => {
           </a>
           <div className="grid grid-cols-1 gap-4">
             <button
-              onClick={() => setActiveTab('acerca')}
+              onClick={() => {
+                setActiveTab('acerca');
+                // La pestaña se monta en el mismo frame, asi que hay que esperar uno para
+                // que exista el ancla; si no, scrollIntoView no encuentra nada.
+                setTimeout(() => {
+                  const el = document.getElementById('instalacion');
+                  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  else window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 60);
+              }}
               className="btn btn-outline py-4 font-bold uppercase tracking-wider border-white/10 text-slate-300 hover:text-white"
             >
               <Info size={18} /> Cómo se instala
@@ -1085,7 +1366,157 @@ const AboutTab = () => (
       </p>
     </section>
 
+    {/* Optimizacion. Cada apartado es una tarjeta suya con aire alrededor: la version de
+        antes iba todo pegado y no se distinguia donde acababa una cosa y empezaba otra.
+        Los porcentajes salen de pares medidos seguidos y alternados (results.jsonl), no de
+        comparar tandas distintas: entre tanda y tanda la maquina varia un 20% larga. */}
     <section className="glass-card">
+      <h3 className="text-2xl mb-8 flex items-center gap-3 border-b border-white/10 pb-4">
+        <Zap className="text-emerald-400" /> Optimización
+      </h3>
+
+      <div className="flex flex-col gap-6">
+
+        <div className="opt-apartado">
+          <Desplegable grande icono={<TrendingUp size={18} className="text-emerald-400" />} titulo="Qué es lo que más FPS da">
+            <p className="text-sm text-secondary leading-relaxed">
+              Por orden de lo que más se nota. El porcentaje es lo que subieron los FPS al
+              quitarlo, midiendo el antes y el después seguidos y en el mismo sitio. Cuando hay
+              un rango es porque se repitió en varias escenas y no dio lo mismo en todas.
+            </p>
+
+            <div className="opt-lista">
+              {[
+                {
+                  n: 1, nombre: 'Quitar el shader', pct: '+32 a +47%',
+                  detalle: 'Es con diferencia lo más caro de todo el pack. Medido tres veces: 137 → 181, 87 → 128 y 121 → 171 FPS. Si vas justo, esto antes que ninguna otra cosa.'
+                },
+                {
+                  n: 2, nombre: 'Quitar Distant Horizons', pct: '+10 a +29%',
+                  detalle: 'Con la configuración barata que llevan los packs. Medido: 120 → 151 y 134 → 174. Con el horizonte a radio 300 y un shader pesado encima la cosa se dispara: ahí fue 46 → 86 FPS.'
+                },
+                {
+                  n: 3, nombre: 'Desactivar los 6 resource packs de animaciones y color', pct: '+7 a +20%',
+                  detalle: 'Fresh Animations y compañía. Los mismos ajustes con 7 packs y con 13: 132 → 141 y 145 → 174 FPS. Es lo que hacen potato y rendimiento.'
+                },
+                {
+                  n: 4, nombre: 'Bajar la distancia de renderizado', pct: '+12 a +14%',
+                  detalle: 'De 8 a 6 chunks: 157 → 178 y 142 → 158 FPS. Además es lo único que hace que el terreno se renderice antes en un procesador justo, que es un problema distinto de los FPS.'
+                },
+                {
+                  n: 5, nombre: 'Bajar la distancia de simulación', pct: '0%',
+                  detalle: 'De 16 a 8 no dio nada: 36 → 34 y 51 → 45 FPS, o sea que salió incluso peor. Lo que hace esta opción no es dibujar, es simular mobs y bloques. No la toques.'
+                }
+              ].map((f) => (
+                <div key={f.n} className="opt-fila">
+                  <span className="opt-pos">{f.n}</span>
+                  <div className="min-w-0">
+                    <div className="opt-nombre">{f.nombre}</div>
+                    <div className="opt-detalle">{f.detalle}</div>
+                  </div>
+                  <span className={`opt-pct ${f.pct === '0%' ? 'opt-pct-nulo' : ''}`}>{f.pct}</span>
+                </div>
+              ))}
+            </div>
+          </Desplegable>
+        </div>
+
+        <div className="opt-apartado">
+          <Desplegable grande icono={<Cpu size={18} className="text-emerald-400" />} titulo="Los cuatro hilos de Distant Horizons salen gratis">
+            <p className="text-sm text-secondary leading-relaxed">
+              Distant Horizons trae una opción para decirle cuántos hilos de CPU puede usar, y
+              lo que se lee por ahí es que la bajes a uno para que no te robe rendimiento. Se
+              midió en intermedia: cuatro hilos a tope contra uno solo al 20% de su tiempo,
+              todo lo demás idéntico.
+            </p>
+
+            <TablaMedida
+              cabeceras={['Hilos de DH', 'Pasada A', 'Pasada B']}
+              filas={[['4 hilos, sin frenar', '107 FPS', '95 FPS'], ['1 hilo al 20%', '94 FPS', '105 FPS']]}
+            />
+
+            <p className="text-sm text-secondary leading-relaxed">
+              Empate, y encima cruzado: cada configuración gana una pasada. La diferencia entre
+              las dos es más pequeña que lo que varía la propia máquina entre pasada y pasada.
+            </p>
+            <p className="text-sm text-secondary leading-relaxed">
+              El truco está en que la medida se toma con el horizonte{' '}
+              <span className="theme-text-primary font-bold">ya construido</span> (cuatro minutos
+              de calentamiento antes de empezar a contar). Los hilos de DH trabajan generando
+              LODs; una vez generados, no hay nada que repartir. Así que ponerle un hilo no te
+              devuelve FPS, solo hace que el horizonte tarde muchísimo más en aparecer. Los packs
+              van con los cuatro puestos: el horizonte se construye rápido y no cuesta nada.
+            </p>
+          </Desplegable>
+        </div>
+
+        <div className="opt-apartado">
+          <Desplegable grande icono={<X size={18} className="text-rose-400" />} titulo="Lo que se probó y no funcionó">
+            <div>
+              <div className="opt-nombre mb-1">Meter Distant Horizons en rendimiento, aunque sea al mínimo</div>
+              <p className="text-sm text-secondary leading-relaxed">
+                La idea era tentadora: horizonte lejano también en la variante rápida, poniendo
+                el radio de LODs bajísimo y bajando la distancia de renderizado de Minecraft a 6
+                para compensar. No sale a cuenta.
+              </p>
+            </div>
+
+            <TablaMedida
+              cabeceras={['Configuración', 'Pasada A', 'Pasada B']}
+              filas={[
+                ['Sin DH, distancia 8 (lo que lleva el pack)', '141 FPS', '174 FPS'],
+                ['DH radio 48, distancia 6', '133 FPS', '147 FPS'],
+                ['DH radio 32, distancia 6', '136 FPS', '149 FPS']
+              ]}
+            />
+
+            <p className="text-sm text-secondary leading-relaxed">
+              Pierde en las dos pasadas, hasta un 15%, y encima ves menos: con la distancia de
+              Minecraft a 6 y los LODs empezando a 32 bloques, el horizonte que ganas es una
+              franja estrecha. Pagas FPS por casi nada. Por eso rendimiento no lleva el mod
+              siquiera dentro del zip.
+            </p>
+
+            <div className="pt-2">
+              <div className="opt-nombre mb-1">Quitar Distant Horizons para que el terreno cargue antes</div>
+              <p className="text-sm text-secondary leading-relaxed">
+                Parecía el sospechoso, porque genera su horizonte con cuatro hilos. Se quitó
+                entero: el terreno tardó <span className="theme-text-primary font-bold">22
+                segundos con él y 21 sin él</span>, mientras los FPS pasaban de 46 a 86. Da
+                imagen por fotograma, no retrasa la carga. Sube los FPS, pero para eso ya está
+                la lista de arriba.
+              </p>
+            </div>
+          </Desplegable>
+        </div>
+
+        <div className="opt-apartado">
+          <Desplegable grande icono={<Info size={18} className="text-emerald-400" />} titulo="Cómo están medidas todas estas cifras">
+            <p className="text-sm text-secondary leading-relaxed">
+              El juego se lanza solo desde un script, siempre en el mismo mundo, en las mismas
+              coordenadas y con el mismo ángulo de cámara, con 6 GB de RAM. Antes de cada
+              pasada se espera a que la máquina esté fría, porque una pasada caliente rinde
+              menos y eso solo ya mueve el resultado.
+            </p>
+            <p className="text-sm text-secondary leading-relaxed">
+              Cada configuración se mide <span className="theme-text-primary font-bold">alternada</span> con
+              su control (A, B, A, B) y nunca contra una tanda de otro día: de una tanda a otra
+              la misma configuración puede dar 141 o 174 FPS. Por eso aquí todos los
+              porcentajes salen de parejas medidas seguidas, y cuando dos pasadas no se ponen
+              de acuerdo se pone el rango en vez de inventar una media bonita.
+            </p>
+            <p className="text-sm text-secondary leading-relaxed">
+              Y lo que se guarda no son solo los FPS: también cuántos chunks y cuántas secciones
+              de terreno hay dibujadas en cada segundo. Eso es lo que permite ver cosas que los
+              FPS esconden, como que ir en élitro sube los FPS porque el mundo deja de dibujarse.
+            </p>
+          </Desplegable>
+        </div>
+
+      </div>
+    </section>
+
+    <section className="glass-card" id="instalacion" style={{ scrollMarginTop: '7rem' }}>
       <h3 className="text-2xl mb-6 flex items-center gap-3 border-b border-white/10 pb-4">
         <Info className="text-emerald-400" /> Cómo se instala
       </h3>
@@ -1110,11 +1541,19 @@ const AboutTab = () => (
           </div>
         </li>
         <li>Se abre una ventana negra que te va contando lo que hace y se cierra sola. Ya está.</li>
-        <li>En el launcher, dale al menos <span className="theme-text-primary font-bold">8 GB de RAM</span> al juego (12 si puedes) y elige el perfil de Fabric.</li>
+        <li>En el launcher, dale al menos <span className="theme-text-primary font-bold">6 GB de RAM</span> al juego (8 si puedes) y elige el perfil de Fabric.</li>
       </ol>
+    </section>
 
-      <div className="mt-8 p-6 rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.04]">
-        <h4 className="text-emerald-400 font-bold mb-3 flex items-center gap-2"><Shield size={18} /> Tus cosas no se pierden</h4>
+    {/* Esto estaba metido dentro de "Cómo se instala" y no pintaba nada ahí: son dudas
+        sueltas, no pasos de la instalación. Fuera y con las cabeceras en forma de pregunta. */}
+    <section className="glass-card">
+      <h3 className="text-2xl mb-6 flex items-center gap-3 border-b border-white/10 pb-4">
+        <Info className="text-emerald-400" /> Preguntas y respuestas
+      </h3>
+
+      <div className="p-6 rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.04]">
+        <h4 className="text-emerald-400 font-bold mb-3 flex items-center gap-2"><Shield size={18} /> ¿Pierdo mis mods y mis ajustes?</h4>
         <p className="text-sm text-secondary leading-relaxed">
           El instalador <span className="theme-text-primary font-bold">mueve</span> tus carpetas
           <code> mods</code>, <code>shaderpacks</code>, <code>resourcepacks</code> y <code>config</code> a una
@@ -1133,7 +1572,7 @@ const AboutTab = () => (
       </div>
 
       <div className="mt-6 p-6 rounded-2xl border border-white/10">
-        <h4 className="font-bold mb-3 flex items-center gap-2 text-slate-200"><Sparkles size={18} className="text-emerald-400" /> Ajustar la variante Calidad al máximo</h4>
+        <h4 className="font-bold mb-3 flex items-center gap-2 text-slate-200"><Sparkles size={18} className="text-emerald-400" /> ¿Cómo exprimo la variante Calidad?</h4>
         <p className="text-sm text-secondary leading-relaxed">
           Para exprimir la variante <span className="theme-text-primary font-bold">Calidad</span> al máximo si tienes un PC potente,
           lo que más se nota y mejor imagen da es <span className="theme-text-primary font-bold">aumentar la distancia de renderizado de Distant Horizons</span> (en el menú del mod dentro del juego, icono de DH arriba a la izquierda). Con shaders pesados apenas cuesta FPS extra y extiende el horizonte enormemente.
@@ -1141,7 +1580,7 @@ const AboutTab = () => (
       </div>
 
       <div className="mt-6 p-6 rounded-2xl border border-white/10">
-        <h4 className="font-bold mb-3 flex items-center gap-2 text-slate-200"><Gamepad2 size={18} className="text-emerald-400" /> Soporte de mando (Controlify)</h4>
+        <h4 className="font-bold mb-3 flex items-center gap-2 text-slate-200"><Gamepad2 size={18} className="text-emerald-400" /> ¿Puedo jugar con mando?</h4>
         <p className="text-sm text-secondary leading-relaxed">
           El modpack incluye <span className="theme-text-primary font-bold">Controlify</span> integrado para jugar cómodamente con mando de Xbox, PlayStation o Switch.
         </p>
@@ -1153,7 +1592,7 @@ const AboutTab = () => (
       </div>
 
       <div className="mt-6 p-6 rounded-2xl border border-white/10">
-        <h4 className="font-bold mb-3 flex items-center gap-2 text-slate-200"><AlertTriangle size={18} className="text-emerald-400" /> Si el terreno lejano se ve roto</h4>
+        <h4 className="font-bold mb-3 flex items-center gap-2 text-slate-200"><AlertTriangle size={18} className="text-emerald-400" /> ¿Y si el terreno lejano se ve roto?</h4>
         <p className="text-sm text-secondary leading-relaxed">
           Pasa al cambiar entre pantalla completa y ventana con shaders activos: Distant Horizons y
           Iris se desincronizan. Pulsa <span className="theme-text-primary font-bold">R</span> y se arregla

@@ -174,6 +174,23 @@ animación de entidad se pasa de 174/191 a 243/244; los dos de colormaps, a 240/
 intermedia y calidad esos mismos recortes dan **exactamente los mismos FPS**: con shader manda
 la GPU. Por eso potato y rendimiento traen 7 packs activos de 13 y las otras dos los 13.
 
+**La carga de chunks no se mide parado.** Clavado en un sitio el terreno entra una vez y ya
+no hay trabajo. Para eso está `--vuelo <bloques/s>` (el jugador avanza hacia donde mira) y las
+series `serie_chunks` y `serie_secciones` del JSON, que resumen `carga.py` y `vuelo.py`.
+Referencia: parado se dibujan 887 secciones; corriendo (6 b/s) 730, y a velocidad de élitro
+(12 b/s) 315. **C2ME está probado y descartado** (18/08): carga antes porque carga menos (876
+chunks y 732 secciones contra 1225 y 887), cambia la iluminación y es alpha sobre el
+serializador del mundo. Bajar `simulationDistance` de 16 a 8 no cambia nada.
+
+**Parado, el cuello no es DH ni faltar chunks: es Sodium mallando.** Los chunks del render
+distance están puestos a los 5-6 s, y Sodium sigue construyendo a ~40 secciones/s hasta el
+segundo 22. Quitar DH **entero** no adelanta la carga ni un segundo (22 s con él, 21 sin él)
+aunque los FPS pasen de 46 a 86. Sodium reparte sus hilos de construcción solo, sin opción que
+tocar: `clamp(max(hilos/3, hilos-6), 1, 10)` sobre `availableProcessors()`, o sea 16 hilos → 10
+y 6 hilos → 2. Confirmado en el otro PC de Iago (i5 9600K, 6 núcleos sin HT + GTX 1660 Super):
+mismos FPS que aquí y el terreno sin acabar de entrar. Como las secciones crecen con el
+**cuadrado** del render distance, bajarlo es la única palanca (11 → 8 deja el 53% del trabajo).
+
 **Sildur's Enhanced Default Fast va PARCHEADO** (`modpacks/perf-1.21.11/parche-sildurs.py`). El
 original no ilumina los LODs de DH y deja el horizonte lejano en negro, porque Iris no le pasa
 el lightmap en los programas `dh_*`; el parche calcula la luz desde `lmcoord` a mano en
